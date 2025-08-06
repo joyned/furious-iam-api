@@ -37,5 +37,15 @@ func SetupRouter() *gin.Engine {
 		users.DELETE("/:id", userController.Delete)
 	}
 
+	roles := r.Group("/roles")
+	{
+		roleRepo := repositories.NewRoleRepository(db)
+		roleService := services.NewRoleService(roleRepo)
+		roleController := controllers.NewRoleController(roleService)
+		roles.GET("", roleController.Search)
+		roles.POST("", roleController.Persist)
+		roles.DELETE("/:id", roleController.Delete)
+	}
+
 	return r
 }
